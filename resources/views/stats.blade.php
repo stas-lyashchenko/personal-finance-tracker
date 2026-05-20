@@ -32,7 +32,8 @@
                 <span class="ico"><img src="{{ asset('images/icons/option/category/category-blue.png') }}"></span>
                 <span class="txt">Категорії</span>
             </a>
-            <a class="menu-item {{ request()->routeIs('operations') ? 'open' : '' }}" href="{{ route('operations') }}">
+            <a class="menu-item {{ request()->routeIs('operations') ? 'open' : '' }}"
+                href="{{ route('operations') }}">
                 <span class="ico"><img src="{{ asset('images/icons/option/file/file-blue.png') }}"></span>
                 <span class="txt">Операції</span>
             </a>
@@ -82,8 +83,8 @@
         @if ($budgetWarning)
             <div class="form-alert budget-alert">{{ $budgetWarning }}</div>
         @endif
-
-        @if ($budgetLimit['enabled'] ?? false)
+        <pre>{{ json_encode($budgetLimit, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+        @if (($budgetLimit['enabled'] ?? false) === true)
             <div class="cardo budget-card {{ $budgetLimit['exceeded'] ?? false ? 'budget-card-danger' : '' }}">
                 <div>
                     <div class="budget-title">Місячний ліміт витрат</div>

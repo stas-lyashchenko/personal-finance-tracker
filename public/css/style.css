@@ -965,6 +965,7 @@ button {
 .icon-option-expense,
 .icon-option-income,
 .icon-field .icon-option,
+.icon-field .icon-option-edit-account,
 .icon-field .icon-option-savings,
 .icon-field .icon-option-edit {
     align-items: center;
@@ -983,6 +984,7 @@ button {
 .icon-option-expense:hover,
 .icon-option-income:hover,
 .icon-field .icon-option:hover,
+.icon-field .icon-option-edit-account:hover,
 .icon-field .icon-option-savings:hover,
 .icon-field .icon-option-edit:hover {
     background: #eff6ff;
@@ -993,6 +995,7 @@ button {
 .icon-option-expense img,
 .icon-option-income img,
 .icon-field .icon-option img,
+.icon-field .icon-option-edit-account img,
 .icon-field .icon-option-savings img,
 .icon-field .icon-option-edit img {
     height: 34px;

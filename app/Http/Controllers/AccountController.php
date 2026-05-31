@@ -100,7 +100,14 @@ class AccountController extends Controller
     {
         $acc = Account::where('user_id', auth()->id())->findOrFail($id);
 
-        $acc->update($request->only(['name', 'balance']));
+        $data = $request->validate([
+            'name' => 'required',
+            'balance' => 'required|numeric',
+            'icon' => 'nullable|string',
+            'color' => 'nullable|string',
+        ]);
+
+        $acc->update($data);
 
         return response()->json(['success' => true]);
     }

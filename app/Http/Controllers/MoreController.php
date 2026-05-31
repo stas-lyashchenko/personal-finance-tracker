@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
+use RuntimeException;
 
 class MoreController extends Controller
 {
@@ -82,15 +83,22 @@ class MoreController extends Controller
         $data['notifications_enabled'] = $request->boolean('notifications_enabled');
         $user = auth()->user();
 
-        DB::transaction(function () use ($user, &$data, $currencyExchangeService) {
-            $data['monthly_budget'] = $currencyExchangeService->convertUserMoney(
-                $user,
-                $data['currency'],
-                (float) $data['monthly_budget']
-            );
+        try {
+            DB::transaction(function () use ($user, &$data, $currencyExchangeService) {
+                $data['monthly_budget'] = $currencyExchangeService->convertUserMoney(
+                    $user,
+                    $data['currency'],
+                    (float) $data['monthly_budget']
+                );
 
-            $user->update($data);
-        });
+                $user->update($data);
+            });
+        } catch (RuntimeException $exception) {
+            return back()
+                ->withInput()
+                ->withErrors(['currency' => $exception->getMessage()]);
+        }
+
         $warning = $budgetLimitService->warningMessage(auth()->user());
 
         if ($warning) {

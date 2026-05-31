@@ -26,7 +26,8 @@ class CurrencyPreferenceConversionTest extends TestCase
 
     public function test_currency_change_converts_user_money_with_latest_rate(): void
     {
-        Cache::forget('nbu_currency_rates_to_uah');
+        Cache::store('file')->forget('nbu_currency_rates_to_uah_v2');
+        Cache::store('file')->forget('nbu_currency_rates_to_uah_last_successful');
         Http::fake([
             'bank.gov.ua/*' => Http::response([
                 ['cc' => 'USD', 'rate' => 40],

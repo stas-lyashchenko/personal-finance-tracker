@@ -6,13 +6,16 @@ use App\Models\Account;
 use App\Models\Category;
 use App\Models\Operation;
 use App\Models\User;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use RuntimeException;
+use Throwable;
 
 class CurrencyExchangeService
 {
-    private const CACHE_KEY = 'nbu_currency_rates_to_uah';
+    private const CACHE_KEY = 'nbu_currency_rates_to_uah_v2';
+
+    private const LAST_SUCCESSFUL_CACHE_KEY = 'nbu_currency_rates_to_uah_last_successful';
 
     private const SUPPORTED_CURRENCIES = ['UAH', 'USD', 'EUR', 'PLN'];
 
@@ -53,8 +56,12 @@ class CurrencyExchangeService
 
         $rates = $this->ratesToUah();
 
-        $amountInUah = $amount * ($rates[$fromCurrency] ?? 1);
-        $converted = $amountInUah / ($rates[$targetCurrency] ?? 1);
+        if (!isset($rates[$fromCurrency], $rates[$targetCurrency])) {
+            throw new RuntimeException('Немає реального курсу для обраної валюти.');
+        }
+
+        $amountInUah = $amount * $rates[$fromCurrency];
+        $converted = $amountInUah / $rates[$targetCurrency];
 
         return round($converted, 2);
     }
@@ -89,35 +96,87 @@ class CurrencyExchangeService
     private function ratesToUah(): array
     {
         return Cache::store('file')->remember(self::CACHE_KEY, now()->addDay(), function () {
-            $rates = ['UAH' => 1.0];
+            $rates = $this->fetchRatesFromNbu();
 
-            try {
-                $response = Http::timeout(5)->get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
+            if ($rates) {
+                Cache::store('file')->put(self::LAST_SUCCESSFUL_CACHE_KEY, $rates, now()->addDays(30));
 
-                if ($response->successful()) {
-                    foreach ($response->json() as $rate) {
-                        $code = strtoupper($rate['cc'] ?? '');
-
-                        if (in_array($code, self::SUPPORTED_CURRENCIES, true)) {
-                            $rates[$code] = (float) $rate['rate'];
-                        }
-                    }
-                }
-            } catch (ConnectionException) {
-                return $this->fallbackRates();
+                return $rates;
             }
 
-            return $rates + $this->fallbackRates();
+            $lastSuccessfulRates = Cache::store('file')->get(self::LAST_SUCCESSFUL_CACHE_KEY);
+
+            if (is_array($lastSuccessfulRates)) {
+                return $lastSuccessfulRates;
+            }
+
+            throw new RuntimeException('Не вдалося отримати актуальні курси валют НБУ.');
         });
     }
 
-    private function fallbackRates(): array
+    private function fetchRatesFromNbu(): ?array
     {
-        return [
-            'UAH' => 1.0,
-            'USD' => 40.0,
-            'EUR' => 43.0,
-            'PLN' => 10.0,
-        ];
+        try {
+            $response = $this->requestNbuRates();
+        } catch (Throwable $exception) {
+            if (!app()->isLocal()) {
+                report($exception);
+
+                return null;
+            }
+
+            try {
+                $response = $this->requestNbuRates(withoutVerifying: true);
+            } catch (Throwable) {
+                return null;
+            }
+        }
+
+        if (!$response->successful() && app()->isLocal()) {
+            try {
+                $response = $this->requestNbuRates(withoutVerifying: true);
+            } catch (Throwable) {
+                return null;
+            }
+        }
+
+        if (!$response->successful()) {
+            return null;
+        }
+
+        $rates = ['UAH' => 1.0];
+
+        foreach ($response->json() as $rate) {
+            $code = strtoupper($rate['cc'] ?? '');
+
+            if (in_array($code, self::SUPPORTED_CURRENCIES, true)) {
+                $rates[$code] = (float) $rate['rate'];
+            }
+        }
+
+        foreach (self::SUPPORTED_CURRENCIES as $currency) {
+            if (!isset($rates[$currency])) {
+                return null;
+            }
+        }
+
+        return $rates;
     }
+
+    private function requestNbuRates(bool $withoutVerifying = false)
+    {
+        $request = Http::timeout(5);
+        $caBundle = config('currency.nbu.ca_bundle');
+
+        if ($caBundle && !$withoutVerifying) {
+            $request = $request->withOptions(['verify' => $caBundle]);
+        }
+
+        if ($withoutVerifying) {
+            $request = $request->withoutVerifying();
+        }
+
+        return $request->get(config('currency.nbu.exchange_url'));
+    }
+
 }

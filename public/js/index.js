@@ -50,6 +50,11 @@ function toggleSavingsIconPicker() {
     showFirstIconGroup('savingsIconModal');
 }
 
+function toggleEditIconPicker() {
+    togglePanel('editIconModal');
+    showFirstIconGroup('editIconModal');
+}
+
 function showIcons(category) {
     document.querySelectorAll('#iconModal .icon-group').forEach(group => {
         group.style.display = group.dataset.category === category ? 'flex' : 'none';
@@ -58,6 +63,12 @@ function showIcons(category) {
 
 function showSavingsIcons(category) {
     document.querySelectorAll('#savingsIconModal .icon-group').forEach(group => {
+        group.style.display = group.dataset.category === category ? 'flex' : 'none';
+    });
+}
+
+function showEditIcons(category) {
+    document.querySelectorAll('#editIconModal .icon-group').forEach(group => {
         group.style.display = group.dataset.category === category ? 'flex' : 'none';
     });
 }
@@ -92,6 +103,12 @@ document.querySelectorAll('.icon-option').forEach(option => {
 document.querySelectorAll('.icon-option-savings').forEach(option => {
     option.addEventListener('click', function () {
         selectIcon(this, 'selectedSavingsIcon', 'selectedSavingsColor', 'selectedSavingsIconPreview', 'savingsIconModal');
+    });
+});
+
+document.querySelectorAll('.icon-option-edit-account').forEach(option => {
+    option.addEventListener('click', function () {
+        selectIcon(this, 'editIcon', 'editColor', 'editIconPreview', 'editIconModal');
     });
 });
 
@@ -141,6 +158,9 @@ function editAccount() {
         .then(data => {
             document.getElementById('editName').value = data.name;
             document.getElementById('editBalance').value = data.balance;
+            document.getElementById('editIcon').value = data.icon;
+            document.getElementById('editColor').value = data.color;
+            document.getElementById('editIconPreview').src = `/images/icons/${data.icon}`;
             document.getElementById('contextMenu').style.display = 'none';
             document.getElementById('editModal').style.display = 'flex';
         });

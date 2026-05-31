@@ -108,6 +108,48 @@
                         <input type="number" name="balance" id="editBalance" step="0.01" placeholder="0.00" required>
                     </div>
 
+                    <div class="icon-field">
+                        <div class="form-group icon-preview-group">
+                            <label>Іконка</label>
+                            <div class="icon-select" onclick="toggleEditIconPicker()">
+                                <img id="editIconPreview" src="{{ asset('images/icons/card/card.png') }}">
+                                <span>Обрати іконку</span>
+                            </div>
+                        </div>
+
+                        <div class="icon-modal" id="editIconModal" style="display:none;">
+                            <div class="icon-categories">
+                                @foreach ($icons as $category => $items)
+                                    <div class="category" onclick="showEditIcons('{{ $category }}')">
+                                        <img src="{{ asset('images/icons/' . $items->first()) }}">
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="icon-picker">
+                                @foreach ($icons as $category => $items)
+                                    <div class="icon-group" data-category="{{ $category }}" style="display:none;">
+                                        @foreach ($items as $icon)
+                                            @php
+                                                $filename = pathinfo($icon, PATHINFO_FILENAME);
+                                                $parts = explode('-', $filename);
+                                                $color = $parts[1] ?? 'gray';
+                                            @endphp
+
+                                            <div class="icon-option-edit-account" data-icon="{{ $icon }}"
+                                                data-color="{{ $color }}">
+                                                <img src="{{ asset('images/icons/' . $icon) }}">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="icon" id="editIcon">
+                    <input type="hidden" name="color" id="editColor">
+
                     <div class="modal-actions">
                         <button type="button" onclick="closeEditModal()" class="cancel-btn">Скасувати</button>
                         <button type="submit" class="save-btn">Зберегти</button>

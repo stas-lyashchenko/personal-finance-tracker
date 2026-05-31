@@ -1,0 +1,302 @@
+/* Account page */
+.amount {
+    color: var(--title);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+.graf {
+    background:
+        linear-gradient(180deg, rgba(37, 99, 235, 0.07), rgba(20, 184, 166, 0.03)),
+        #f8fafc;
+    border: 1px solid #dbeafe;
+    border-radius: 16px;
+    padding: 18px;
+    position: relative;
+}
+
+.compact-chart canvas {
+    min-height: 220px;
+}
+
+.trend-box canvas {
+    min-height: 240px;
+}
+
+.chart-tooltip {
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    left: 0;
+    line-height: 1.35;
+    opacity: 0;
+    padding: 8px 10px;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    transform: translate(-50%, calc(-100% - 12px));
+    transition: opacity 0.12s ease;
+    white-space: nowrap;
+    z-index: 50;
+}
+
+.chart-tooltip.show {
+    opacity: 1;
+}
+
+.chart-tooltip span {
+    color: #93c5fd;
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.graf {
+    text-align: center;
+}
+
+.graf img {
+    height: 400px;
+    max-width: 100%;
+    padding-bottom: 15px;
+}
+
+.icon {
+    align-items: center;
+    border-radius: 10px;
+    display: flex;
+    height: 42px;
+    justify-content: center;
+    width: 42px;
+}
+
+.icon img {
+    width: 30px;
+}
+
+.item {
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 5%);
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 12px;
+}
+
+.item-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-balance {
+    background: var(--accent);
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.main-balance .big,
+.main-balance .currency {
+    font-size: 40px;
+}
+
+.main-balance .big {
+    font-family: Inter, Arial, sans-serif;
+    font-weight: 700;
+}
+
+.main-balance .currency {
+    font-weight: 400;
+    padding-right: 5px;
+}
+
+.main-balance .title {
+    color: rgb(255 255 255 / 75%);
+    font-size: 18px;
+    padding-bottom: 10px;
+}
+
+.name {
+    color: var(--title);
+    font-weight: 400;
+}
+
+.small-card {
+    background: rgb(255 255 255 / 20%);
+    border-radius: 12px;
+    height: 100%;
+    padding: 15px;
+    width: 50%;
+}
+
+.small-card b {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.small-card div {
+    color: rgb(255 255 255 / 75%);
+    font-size: 14px;
+    padding-bottom: 5px;
+}
+
+.small-cards {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.account-page .main {
+    padding: 70px 28px 18px;
+}
+
+.account-page .main-balance {
+    align-items: center;
+    display: grid;
+    gap: 18px;
+    grid-template-columns: minmax(220px, 0.85fr) minmax(260px, 1.15fr);
+    margin-bottom: 14px;
+    padding: 18px 20px;
+}
+
+.account-page .main-balance .title {
+    font-size: 14px;
+    padding-bottom: 6px;
+}
+
+.account-page .main-balance .big,
+.account-page .main-balance .currency {
+    font-size: 30px;
+}
+
+.account-page .small-cards {
+    gap: 10px;
+    margin-top: 0;
+}
+
+.account-page .small-card {
+    padding: 10px 12px;
+}
+
+.account-page .small-card b {
+    font-size: 19px;
+}
+
+.account-page .small-card div {
+    font-size: 12px;
+    padding-bottom: 3px;
+}
+
+.account-page .grid {
+    gap: 14px;
+    grid-template-columns: minmax(420px, 1.35fr) minmax(280px, 0.65fr);
+}
+
+.account-page .grid h3 {
+    font-size: 18px;
+    padding: 8px 0 10px;
+}
+
+.account-page .account-panel,
+.account-page .card-add {
+    padding: 14px;
+}
+
+.account-page .panel-subtitle {
+    margin-top: 14px;
+}
+
+.account-page .item {
+    border: 1px solid #eef2f7;
+    box-shadow: none;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.account-page .item:hover {
+    background: #f8fbff;
+    border-color: #bfdbfe;
+    transform: translateX(2px);
+}
+
+.account-page .icon {
+    border-radius: 8px;
+    height: 34px;
+    width: 34px;
+}
+
+.account-page .icon img {
+    width: 22px;
+}
+
+.account-page .name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.account-page .amount {
+    font-size: 13px;
+}
+
+.account-page .add {
+    border-radius: 8px;
+    font-size: 13px;
+    padding: 9px 10px;
+}
+
+.account-page .add-form {
+    border-radius: 10px;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 12px;
+}
+
+.account-page .form-group {
+    gap: 5px;
+}
+
+.account-page .form-group input,
+.account-page .form-group select {
+    min-height: 38px;
+}
+
+.account-page .icon-select {
+    padding: 8px;
+}
+
+.account-page .icon-modal {
+    padding: 10px;
+}
+
+.account-page .category,
+.account-page .icon-option,
+.account-page .icon-option-savings {
+    height: 40px;
+    width: 40px;
+}
+
+.account-page .icon-picker {
+    max-height: 140px;
+}
+
+.account-page .graf {
+    padding: 12px;
+}
+
+.account-page .graf canvas,
+.account-page .chart-box canvas {
+    min-height: 210px;
+}
+
+

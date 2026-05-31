@@ -1,0 +1,114 @@
+/* Operations page */
+.active-chip {
+    background: #cbe4ff;
+    border-color: #bfd3ff;
+    color: var(--accent-dark);
+}
+
+.chip,
+.chipf {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.chip {
+    padding: 8px 12px;
+}
+
+.chipf {
+    padding: 4px 15px;
+}
+
+.chipf img {
+    width: 13px;
+}
+
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+.date-label {
+    font-size: 18px;
+    font-weight: 400;
+    margin: 10px 0;
+}
+
+.filters .search-row {
+    margin-bottom: 10px;
+}
+
+.list {
+    padding: 10px 0;
+}
+
+
+.op {
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 5%);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 12px;
+}
+
+.op-amt {
+    font-weight: 800;
+}
+
+.op-date,
+.op-sub {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.op-ico {
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 12px;
+    color: var(--text);
+    display: flex;
+    font-size: 18px;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+}
+
+.op-ico img {
+    opacity: 0.6;
+    width: 30px;
+}
+
+.op-left {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+}
+
+.op-name {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.op-right {
+    text-align: right;
+}
+
+.search {
+    padding: 12px 14px;
+}
+
+.section-title {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 14px 4px 8px;
+}
+

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>Personal Finance Tracker | Статистика</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=hide-balance-sub-20260524">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/stats.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 

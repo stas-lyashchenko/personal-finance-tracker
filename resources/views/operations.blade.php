@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>Операції</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/operations.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 

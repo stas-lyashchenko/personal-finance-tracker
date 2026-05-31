@@ -1,0 +1,127 @@
+/* More page */
+.avatar {
+    align-items: center;
+    background: rgb(255 255 255 / 25%);
+    border-radius: 50%;
+    display: flex;
+    font-size: 28px;
+    height: 100px;
+    justify-content: center;
+    width: 100px;
+}
+
+.avatar-button {
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    transition: filter 0.2s, transform 0.2s;
+}
+
+.avatar-button:hover,
+.avatar-button:focus-visible {
+    filter: brightness(0.94);
+    outline: 3px solid rgb(98 91 255 / 25%);
+    transform: translateY(-1px);
+}
+
+.avatar img {
+    width: 60px;
+}
+
+.avatar .avatar-image {
+    border-radius: 50%;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.avatar .avatar-image-default {
+    border-radius: 0;
+    height: auto;
+    object-fit: contain;
+    width: 60px;
+}
+
+.card.setting {
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.card.setting:hover {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+.card.setting:hover .muted,
+.card.setting:hover b {
+    color: #fff;
+}
+
+.card.setting:hover .set-ico img {
+    filter: brightness(1.2);
+    transition: filter 0.3s;
+}
+
+
+.profile-card {
+    align-items: center;
+    background: var(--accent);
+    border-radius: 18px;
+    color: #fff;
+    display: flex;
+    gap: 18px;
+    padding: 30px;
+}
+
+.profile-card div {
+    padding-bottom: 5px;
+}
+
+.profile-email {
+    font-size: 13px;
+    margin: 4px 0 10px;
+    opacity: 0.9;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+.set-ico {
+    align-items: center;
+    border-radius: 6px;
+    display: flex;
+    font-size: 18px;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+}
+
+.set-ico img {
+    width: 25px;
+}
+
+.setting {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+}
+
+.setting span {
+    display: flex;
+    flex-direction: column;
+}
+
+.success-alert {
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+    color: #15803d;
+}
+
+

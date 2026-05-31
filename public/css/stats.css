@@ -1,0 +1,153 @@
+.chart-placeholder {
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 12px;
+    color: var(--muted);
+    display: flex;
+    font-size: 18px;
+    height: 250px;
+    justify-content: center;
+}
+
+.chart-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+}
+
+.chart-box canvas,
+.graf canvas {
+    display: block;
+    min-height: 260px;
+    width: 100%;
+}
+
+
+.stat-panel {
+    border: 1px solid #e2e8f0;
+}
+
+.chart-head {
+    align-items: flex-start;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.chart-head h3 {
+    color: var(--title);
+    font-size: 20px;
+    font-weight: 800;
+    padding: 0 0 4px;
+}
+
+.chart-pill {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 800;
+    max-width: 360px;
+    overflow: hidden;
+    padding: 9px 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stats-insights {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0 0 20px;
+}
+
+.insight-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 4%);
+    padding: 16px;
+}
+
+.insight-card span {
+    color: #64748b;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.insight-card strong {
+    color: #0f172a;
+    display: block;
+    font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.seg {
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: #333;
+    font-size: 16px;
+    padding: 10px 16px;
+    transition: all 0.2s ease;
+}
+
+.segmented {
+    background: #eee;
+    border-radius: 16px;
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+}
+
+.active-seg {
+    background: #fff;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+    color: #007aff;
+}
+
+.stat {
+    color: #fff;
+    overflow: hidden;
+    padding: 22px;
+    position: relative;
+}
+
+.stat::after {
+    background: rgb(255 255 255 / 15%);
+    border-radius: 999px;
+    content: "";
+    height: 110px;
+    position: absolute;
+    right: -34px;
+    top: -38px;
+    width: 110px;
+}
+
+.stat-sub {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+#statBalanceSub {
+    display: none !important;
+}
+
+.stat-title {
+    opacity: 0.95;
+}
+
+.stat-value {
+    font-size: 30px;
+    font-weight: 900;
+    margin: 6px 0;
+}
+

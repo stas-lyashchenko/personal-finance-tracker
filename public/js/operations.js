@@ -5,6 +5,60 @@ let currentOpId = null;
 let pressTimer = null;
 let menuTimer = null;
 
+function syncCategoryOptions(typeSelect, categorySelect, preferredValue = null) {
+    if (!typeSelect || !categorySelect) {
+        return;
+    }
+
+    const type = typeSelect.value;
+    let firstVisible = null;
+    let fallbackValue = null;
+    let preferredIsVisible = false;
+
+    Array.from(categorySelect.options).forEach(option => {
+        const isFallback = option.dataset.fallback === 'true';
+        const isVisible = isFallback || option.dataset.type === type;
+
+        option.hidden = !isVisible;
+        option.disabled = !isVisible;
+
+        if (isFallback) {
+            fallbackValue = option.value;
+        }
+
+        if (isVisible && !isFallback && firstVisible === null) {
+            firstVisible = option.value;
+        }
+
+        if (isVisible && option.value === preferredValue) {
+            preferredIsVisible = true;
+        }
+    });
+
+    if (preferredValue && preferredIsVisible) {
+        categorySelect.value = preferredValue;
+        return;
+    }
+
+    const selectedOption = categorySelect.selectedOptions[0];
+
+    const selectedIsFallback = selectedOption?.dataset.fallback === 'true';
+
+    if (!selectedOption || selectedOption.disabled || (selectedIsFallback && firstVisible !== null && preferredValue === null)) {
+        categorySelect.value = firstVisible ?? fallbackValue ?? '';
+    }
+}
+
+const addTypeSelect = document.getElementById('addType');
+const addCategorySelect = document.getElementById('addCategory');
+const editTypeSelect = document.getElementById('editType');
+const editCategorySelect = document.getElementById('editCategory');
+
+syncCategoryOptions(addTypeSelect, addCategorySelect);
+
+addTypeSelect?.addEventListener('change', () => syncCategoryOptions(addTypeSelect, addCategorySelect));
+editTypeSelect?.addEventListener('change', () => syncCategoryOptions(editTypeSelect, editCategorySelect));
+
 searchInput.addEventListener('input', () => {
     const term = searchInput.value.toLowerCase();
 
@@ -97,9 +151,9 @@ function openEditModal(id) {
     document.getElementById('editId').value = id;
     document.getElementById('editName').value = op.dataset.name;
     document.getElementById('editAmount').value = op.dataset.amount;
-    document.getElementById('editCategory').value = op.dataset.category;
     document.getElementById('editAccount').value = op.dataset.account;
     document.getElementById('editType').value = op.dataset.type;
+    syncCategoryOptions(editTypeSelect, editCategorySelect, op.dataset.category);
     document.getElementById('editMethod').value = op.dataset.method;
     document.getElementById('editModal').style.display = 'flex';
 }

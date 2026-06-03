@@ -8,6 +8,7 @@ use App\Support\BudgetLimitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 class OperationController extends Controller
 {
     public function index(BudgetLimitService $budgetLimitService)
@@ -27,18 +28,23 @@ class OperationController extends Controller
     {
         $data = $request->validate([
             'account_id' => 'required',
-            'category_id' => 'nullable',
+            'category_id' => [
+                'nullable',
+                Rule::exists('categories', 'id')->where(fn($query) => $query
+                    ->where('user_id', Auth::id())
+                    ->where('type', $request->input('type'))
+                ),
+            ],
             'name' => 'required|string',
             'amount' => 'required|numeric|min:0.01',
             'type' => 'required|in:income,expense',
             'method' => 'required|in:card,cash',
         ]);
         $data['category_id'] = $data['category_id'] ?: null;
-        $category = $data['category_id']
-            ? Category::where('user_id', Auth::id())->findOrFail($data['category_id'])
-            : null;
         $account = Account::where('user_id', Auth::id())->findOrFail($data['account_id']);
-        DB::transaction(function () use ($data, $account, $category) {
+        $category = $this->categoryForOperation($data['category_id'], $data['type']);
+        $data['category_id'] = $category->id;
+        DB::transaction(function () use ($data, $account) {
             $operation = Operation::create([
                 'user_id' => Auth::id(),
                 'account_id' => $account->id,
@@ -65,7 +71,13 @@ class OperationController extends Controller
 
         $data = $request->validate([
             'account_id' => 'required',
-            'category_id' => 'nullable',
+            'category_id' => [
+                'nullable',
+                Rule::exists('categories', 'id')->where(fn($query) => $query
+                    ->where('user_id', Auth::id())
+                    ->where('type', $request->input('type'))
+                ),
+            ],
             'name' => 'required|string',
             'amount' => 'required|numeric|min:0.01',
             'type' => 'required|in:income,expense',
@@ -73,10 +85,9 @@ class OperationController extends Controller
         ]);
 
         $data['category_id'] = $data['category_id'] ?: null;
-        $category = $data['category_id']
-            ? Category::where('user_id', Auth::id())->findOrFail($data['category_id'])
-            : null;
         Account::where('user_id', Auth::id())->findOrFail($data['account_id']);
+        $category = $this->categoryForOperation($data['category_id'], $data['type']);
+        $data['category_id'] = $category->id;
 
         DB::transaction(function () use ($operation, $data) {
 
@@ -112,6 +123,29 @@ class OperationController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    private function categoryForOperation(?int $categoryId, string $type): Category
+    {
+        if ($categoryId) {
+            return Category::where('user_id', Auth::id())
+                ->where('type', $type)
+                ->findOrFail($categoryId);
+        }
+
+        return Category::firstOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'name' => 'Інше',
+                'type' => $type,
+            ],
+            [
+                'amount' => 0,
+                'icon' => 'option/category/category-blue.png',
+                'color' => 'gray',
+            ]
+        );
+    }
+
     private function applyBalanceEffect(Operation $operation): void
     {
         $this->moveAccountBalance($operation, $operation->type === 'income' ? 1 : -1);

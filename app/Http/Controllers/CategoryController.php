@@ -75,7 +75,6 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:expense,income',
-            'amount' => 'required|numeric|min:0',
             'icon' => 'required|string',
             'color' => 'required|string'
         ]);
@@ -84,7 +83,6 @@ class CategoryController extends Controller
             'user_id' => auth()->id(),
             'name' => $request->name,
             'type' => $request->type,
-            'amount' => $request->amount,
             'icon' => $request->icon,
             'color' => $request->color,
         ]);
@@ -96,7 +94,6 @@ class CategoryController extends Controller
     {
         $category = Category::where('user_id', auth()->id())->findOrFail($id);
         $category->name = $request->name;
-        $category->amount = $request->amount;
         $category->icon = $request->icon;
         $category->color = $request->color;
         $category->save();

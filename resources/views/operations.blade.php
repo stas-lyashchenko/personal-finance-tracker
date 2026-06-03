@@ -112,9 +112,10 @@
                     </div>
                     <div class="form-group">
                         <label>Категорія</label>
-                        <select name="category_id" required>
+                        <select name="category_id" id="addCategory">
+                            <option value="" data-fallback="true">Інше</option>
                             @foreach ($categories as $cat)
-                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                <option value="{{ $cat->id }}" data-type="{{ $cat->type }}">{{ $cat->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -137,7 +138,7 @@
                         </div>
                         <div class="form-group">
                             <label>Тип</label>
-                            <select name="type" required>
+                            <select name="type" id="addType" required>
                                 <option value="expense">Витрати</option>
                                 <option value="income">Доходи</option>
                             </select>
@@ -153,7 +154,7 @@
                     <div class="modal-actions">
                         <button type="button" onclick="toggleAddOperationModal()"
                             class="cancel-btn">Скасувати</button>
-                        <button type="submit" class="save-btn" @disabled($accounts->isEmpty() || $categories->isEmpty())>Додати</button>
+                        <button type="submit" class="save-btn" @disabled($accounts->isEmpty())>Додати</button>
                     </div>
                 </form>
             </div>
@@ -182,9 +183,10 @@
                     </div>
                     <div class="form-group">
                         <label for="editCategory">Категорія</label>
-                        <select name="category_id" id="editCategory" required>
+                        <select name="category_id" id="editCategory">
+                            <option value="" data-fallback="true">Інше</option>
                             @foreach ($categories as $cat)
-                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                <option value="{{ $cat->id }}" data-type="{{ $cat->type }}">{{ $cat->name }}</option>
                             @endforeach
                         </select>
                     </div>

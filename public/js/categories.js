@@ -90,14 +90,12 @@ document.querySelectorAll('.icon-btn.edit').forEach((btn, index) => {
         selectedCatId = cat.dataset.id;
 
         const name = cat.querySelector('.cat-name').innerText;
-        const amountText = cat.querySelector('.cat-amount').innerText.replace(/[^\d.,-]/g, '').replace(',', '.');
         const iconSrc = cat.querySelector('.cat-ico img').src;
         const icon = iconSrc.split('/').slice(-2).join('/');
         const color = cat.querySelector('.cat-ico').classList[1] || 'gray';
 
         document.getElementById('editId').value = selectedCatId;
         document.getElementById('editName').value = name;
-        document.getElementById('editAmount').value = parseFloat(amountText) || 0;
         document.getElementById('editIconPreview').src = iconSrc;
         document.getElementById('editIcon').value = icon;
         document.getElementById('editColor').value = color;

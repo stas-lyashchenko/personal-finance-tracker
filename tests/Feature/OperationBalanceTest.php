@@ -73,4 +73,69 @@ class OperationBalanceTest extends TestCase
         $this->assertSame('1000.00', $account->fresh()->balance);
         $this->assertSame('0.00', $category->fresh()->amount);
     }
+
+    public function test_operation_category_must_match_operation_type(): void
+    {
+        $user = User::factory()->create();
+        $account = Account::create([
+            'user_id' => $user->id,
+            'name' => 'Main card',
+            'type' => 'account',
+            'balance' => 1000,
+            'icon' => 'card/card.png',
+            'color' => 'gray',
+        ]);
+        $category = Category::create([
+            'user_id' => $user->id,
+            'name' => 'Salary',
+            'type' => 'income',
+            'amount' => 0,
+            'icon' => 'coins/coins-green.png',
+            'color' => 'green',
+        ]);
+
+        $this->actingAs($user)->post(route('operations.store'), [
+            'account_id' => $account->id,
+            'category_id' => $category->id,
+            'name' => 'Groceries',
+            'amount' => 250,
+            'type' => 'expense',
+            'method' => 'card',
+        ])->assertSessionHasErrors('category_id');
+
+        $this->assertDatabaseCount('operations', 0);
+        $this->assertSame('1000.00', $account->fresh()->balance);
+        $this->assertSame('0.00', $category->fresh()->amount);
+    }
+
+    public function test_operation_without_category_uses_other_category(): void
+    {
+        $user = User::factory()->create();
+        $account = Account::create([
+            'user_id' => $user->id,
+            'name' => 'Main card',
+            'type' => 'account',
+            'balance' => 1000,
+            'icon' => 'card/card.png',
+            'color' => 'gray',
+        ]);
+
+        $this->actingAs($user)->post(route('operations.store'), [
+            'account_id' => $account->id,
+            'name' => 'Unsorted expense',
+            'amount' => 125,
+            'type' => 'expense',
+            'method' => 'card',
+        ])->assertRedirect();
+
+        $otherCategory = Category::where('user_id', $user->id)
+            ->where('type', 'expense')
+            ->where('name', 'Інше')
+            ->firstOrFail();
+
+        $operation = Operation::firstOrFail();
+        $this->assertSame($otherCategory->id, $operation->category_id);
+        $this->assertSame('125.00', $otherCategory->amount);
+        $this->assertSame('875.00', $account->fresh()->balance);
+    }
 }

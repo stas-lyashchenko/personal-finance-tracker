@@ -17,9 +17,6 @@ use ZipArchive;
 class ImportedOperationController extends Controller
 {
     private array $categoryKeywords = [
-        'Продукти' => ['атб', 'аврора', 'сільпо', 'silpo', 'fora', 'novus', 'metro', 'varus', 'auchan', 'маркет', 'супермаркет', 'продукти'],
-        'Транспорт' => ['uber', 'bolt', 'uklon', 'taxi', 'metro', 'wog', 'okko', 'shell', 'upg', 'таксі'],
-        'Підписки' => ['netflix', 'spotify', 'youtube', 'apple', 'google', 'subscription'],
         'Зарплата' => ['salary', 'зарплата', 'зароб', 'payroll'],
         'Дім та ремонт' => ['дім', 'ремонт', 'будівництво', 'інтернет', 'телефон'],
         'Зарахування' => ['зарахування', 'зарахування'],
@@ -35,12 +32,9 @@ class ImportedOperationController extends Controller
         'Продукти' => ['атб', 'сільпо', 'silpo', 'fora', 'novus', 'metro', 'varus', 'auchan', 'маркет', 'супермаркет', 'продукти', 'magazinsmakota', 'ivushka', 'shop koshyk', 'кошик'],
         'Транспорт' => ['миколаївелектротранс', 'тролейбус', 'uber', 'bolt', 'uklon', 'taxi', 'таксі', 'wog', 'okko', 'shell', 'upg'],
         'Підписки' => ['netflix', 'spotify', 'youtube', 'apple', 'google', 'subscription'],
-        'Перекази' => ['переказ', 'поповнення', 'privat24', 'p24', '5168', '4441'],
         'Краса та догляд' => ['eva', 'prostor', 'watsons', 'makeup'],
         'Кафе' => ['кафе', 'ресторан', 'coffee', 'кав'],
-        'Аптеки' => ['аптека', 'аптеки', 'ліки'],
-        'Комунальні' => ['комунал', 'інтернет', 'телефон', 'електро', 'газ', 'вода'],
-        'Зарплата' => ['salary', 'зарплата', 'зароб', 'payroll']
+        'Комунальні' => ['комунал', 'інтернет', 'телефон', 'електро', 'газ', 'вода']
     ];
 
     public function import(Request $request, BudgetLimitService $budgetLimitService)

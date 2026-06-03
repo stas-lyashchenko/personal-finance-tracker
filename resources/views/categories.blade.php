@@ -11,12 +11,14 @@
 
 @php
     $currencyCode = $currencyCode ?? (auth()->user()->currency ?? 'UAH');
-    $currencySymbol = $currencySymbol ?? match ($currencyCode) {
-        'USD' => '$',
-        'EUR' => '€',
-        'PLN' => 'zł',
-        default => '₴',
-    };
+    $currencySymbol =
+        $currencySymbol ??
+        match ($currencyCode) {
+            'USD' => '$',
+            'EUR' => '€',
+            'PLN' => 'zł',
+            default => '₴',
+        };
 @endphp
 
 <body class="{{ (auth()->user()->theme ?? 'light') === 'dark' ? 'dark-theme' : '' }}">
@@ -40,7 +42,8 @@
                 <span class="txt">Категорії</span>
             </a>
 
-            <a class="menu-item {{ request()->routeIs('operations') ? 'open' : '' }}" href="{{ route('operations') }}">
+            <a class="menu-item {{ request()->routeIs('operations') ? 'open' : '' }}"
+                href="{{ route('operations') }}">
                 <span class="ico"><img src="{{ asset('images/icons/option/file/file-blue.png') }}"></span>
                 <span class="txt">Операції</span>
             </a>
@@ -120,47 +123,44 @@
                             <label for="editName">Назва</label>
                             <input type="text" name="name" id="editName" placeholder="Назва категорії" required>
                         </div>
-                        <div class="form-group">
-                            <label for="editAmount">Ліміт або сума</label>
-                            <input type="number" name="amount" id="editAmount" min="0" step="0.01" placeholder="0.00"
-                                required>
-                        </div>
                     </div>
 
                     <div class="icon-field">
-                    <div class="form-group icon-preview-group">
-                        <label>Іконка</label>
-                        <div class="icon-select" onclick="toggleEditIconPicker()">
-                            <img id="editIconPreview" src="{{ asset('images/icons/card/card.png') }}">
-                            <span>Обрати іконку</span>
+                        <div class="form-group icon-preview-group">
+                            <label>Іконка</label>
+                            <div class="icon-select" onclick="toggleEditIconPicker()">
+                                <img id="editIconPreview" src="{{ asset('images/icons/card/card.png') }}">
+                                <span>Обрати іконку</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="icon-modal" id="editIconModal" style="display:none;">
-                        <div class="icon-categories">
-                            @foreach ($icons as $category => $items)
-                                <div class="category" onclick="showEditIcons('{{ $category }}')">
-                                    <img src="{{ asset('images/icons/' . $items[0]) }}">
-                                </div>
-                            @endforeach
+                        <div class="icon-modal" id="editIconModal" style="display:none;">
+                            <div class="icon-categories">
+                                @foreach ($icons as $category => $items)
+                                    <div class="category" onclick="showEditIcons('{{ $category }}')">
+                                        <img src="{{ asset('images/icons/' . $items[0]) }}">
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="icon-picker">
+                                @foreach ($icons as $category => $items)
+                                    <div class="icon-group" data-category="{{ $category }}"
+                                        style="display:none;">
+                                        @foreach ($items as $icon)
+                                            @php
+                                                $filename = pathinfo($icon, PATHINFO_FILENAME);
+                                                $parts = explode('-', $filename);
+                                                $color = $parts[1] ?? 'gray';
+                                            @endphp
+                                            <div class="icon-option-edit" data-icon="{{ $icon }}"
+                                                data-color="{{ $color }}">
+                                                <img src="{{ asset('images/icons/' . $icon) }}">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                        <div class="icon-picker">
-                            @foreach ($icons as $category => $items)
-                                <div class="icon-group" data-category="{{ $category }}" style="display:none;">
-                                    @foreach ($items as $icon)
-                                        @php
-                                            $filename = pathinfo($icon, PATHINFO_FILENAME);
-                                            $parts = explode('-', $filename);
-                                            $color = $parts[1] ?? 'gray';
-                                        @endphp
-                                        <div class="icon-option-edit" data-icon="{{ $icon }}" data-color="{{ $color }}">
-                                            <img src="{{ asset('images/icons/' . $icon) }}">
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
                     </div>
 
                     <input type="hidden" name="icon" id="editIcon">
@@ -191,7 +191,8 @@
                                 <div class="cat-name">{{ $cat->name }}</div>
                             </div>
                             <div class="cat-right">
-                                <div class="cat-amount">{{ $currencySymbol }} {{ number_format($cat->amount, 2) }}</div>
+                                <div class="cat-amount">{{ $currencySymbol }} {{ number_format($cat->amount, 2) }}
+                                </div>
                             </div>
                         </div>
 
@@ -220,48 +221,46 @@
                             <label>Назва</label>
                             <input type="text" name="name" placeholder="Продукти" required>
                         </div>
-                        <div class="form-group">
-                            <label>Ліміт або сума</label>
-                            <input type="number" name="amount" min="0" step="0.01" placeholder="0.00" required>
-                        </div>
                     </div>
 
                     <div class="icon-field">
-                    <div class="form-group icon-preview-group">
-                        <label>Іконка</label>
-                        <div class="icon-select" onclick="toggleExpenseIconPicker()">
-                            <img id="selectedExpenseIconPreview" src="{{ asset('images/icons/bag/bag-black.png') }}">
-                            <span>Обрати іконку</span>
-                        </div>
-                    </div>
-
-                    <div class="icon-modal" id="expenseIconModal" style="display:none;">
-                        <div class="icon-categories">
-                            @foreach ($icons as $category => $items)
-                                <div class="category" onclick="showExpenseIcons('{{ $category }}')">
-                                    <img src="{{ asset('images/icons/' . $items[0]) }}">
-                                </div>
-                            @endforeach
+                        <div class="form-group icon-preview-group">
+                            <label>Іконка</label>
+                            <div class="icon-select" onclick="toggleExpenseIconPicker()">
+                                <img id="selectedExpenseIconPreview"
+                                    src="{{ asset('images/icons/bag/bag-black.png') }}">
+                                <span>Обрати іконку</span>
+                            </div>
                         </div>
 
-                        <div class="icon-picker">
-                            @foreach ($icons as $category => $items)
-                                <div class="icon-group" data-category="{{ $category }}" style="display:none;">
-                                    @foreach ($items as $icon)
-                                        @php
-                                            $filename = pathinfo($icon, PATHINFO_FILENAME);
-                                            $parts = explode('-', $filename);
-                                            $color = $parts[1] ?? 'gray';
-                                        @endphp
-                                        <div class="icon-option-expense" data-icon="{{ $icon }}"
-                                            data-color="{{ $color }}">
-                                            <img src="{{ asset('images/icons/' . $icon) }}">
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endforeach
+                        <div class="icon-modal" id="expenseIconModal" style="display:none;">
+                            <div class="icon-categories">
+                                @foreach ($icons as $category => $items)
+                                    <div class="category" onclick="showExpenseIcons('{{ $category }}')">
+                                        <img src="{{ asset('images/icons/' . $items[0]) }}">
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="icon-picker">
+                                @foreach ($icons as $category => $items)
+                                    <div class="icon-group" data-category="{{ $category }}"
+                                        style="display:none;">
+                                        @foreach ($items as $icon)
+                                            @php
+                                                $filename = pathinfo($icon, PATHINFO_FILENAME);
+                                                $parts = explode('-', $filename);
+                                                $color = $parts[1] ?? 'gray';
+                                            @endphp
+                                            <div class="icon-option-expense" data-icon="{{ $icon }}"
+                                                data-color="{{ $color }}">
+                                                <img src="{{ asset('images/icons/' . $icon) }}">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
                     </div>
 
                     <input type="hidden" name="icon" id="selectedExpenseIcon" value="shop/shop-gray.png">
@@ -286,7 +285,8 @@
                                 <div class="cat-name">{{ $cat->name }}</div>
                             </div>
                             <div class="cat-right">
-                                <div class="cat-amount">{{ $currencySymbol }} {{ number_format($cat->amount, 2) }}</div>
+                                <div class="cat-amount">{{ $currencySymbol }} {{ number_format($cat->amount, 2) }}
+                                </div>
                             </div>
                         </div>
 
@@ -315,48 +315,46 @@
                             <label>Назва</label>
                             <input type="text" name="name" placeholder="Зарплата" required>
                         </div>
-                        <div class="form-group">
-                            <label>Планова сума</label>
-                            <input type="number" name="amount" min="0" step="0.01" placeholder="0.00" required>
-                        </div>
                     </div>
 
                     <div class="icon-field">
-                    <div class="form-group icon-preview-group">
-                        <label>Іконка</label>
-                        <div class="icon-select" onclick="toggleIncomeIconPicker()">
-                            <img id="selectedIncomeIconPreview" src="{{ asset('images/icons/coins/coins-green.png') }}">
-                            <span>Обрати іконку</span>
-                        </div>
-                    </div>
-
-                    <div class="icon-modal" id="incomeIconModal" style="display:none;">
-                        <div class="icon-categories">
-                            @foreach ($icons as $category => $items)
-                                <div class="category" onclick="showIncomeIcons('{{ $category }}')">
-                                    <img src="{{ asset('images/icons/' . $items[0]) }}">
-                                </div>
-                            @endforeach
+                        <div class="form-group icon-preview-group">
+                            <label>Іконка</label>
+                            <div class="icon-select" onclick="toggleIncomeIconPicker()">
+                                <img id="selectedIncomeIconPreview"
+                                    src="{{ asset('images/icons/coins/coins-green.png') }}">
+                                <span>Обрати іконку</span>
+                            </div>
                         </div>
 
-                        <div class="icon-picker">
-                            @foreach ($icons as $category => $items)
-                                <div class="icon-group" data-category="{{ $category }}" style="display:none;">
-                                    @foreach ($items as $icon)
-                                        @php
-                                            $filename = pathinfo($icon, PATHINFO_FILENAME);
-                                            $parts = explode('-', $filename);
-                                            $color = $parts[1] ?? 'gray';
-                                        @endphp
-                                        <div class="icon-option-income" data-icon="{{ $icon }}"
-                                            data-color="{{ $color }}">
-                                            <img src="{{ asset('images/icons/' . $icon) }}">
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endforeach
+                        <div class="icon-modal" id="incomeIconModal" style="display:none;">
+                            <div class="icon-categories">
+                                @foreach ($icons as $category => $items)
+                                    <div class="category" onclick="showIncomeIcons('{{ $category }}')">
+                                        <img src="{{ asset('images/icons/' . $items[0]) }}">
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="icon-picker">
+                                @foreach ($icons as $category => $items)
+                                    <div class="icon-group" data-category="{{ $category }}"
+                                        style="display:none;">
+                                        @foreach ($items as $icon)
+                                            @php
+                                                $filename = pathinfo($icon, PATHINFO_FILENAME);
+                                                $parts = explode('-', $filename);
+                                                $color = $parts[1] ?? 'gray';
+                                            @endphp
+                                            <div class="icon-option-income" data-icon="{{ $icon }}"
+                                                data-color="{{ $color }}">
+                                                <img src="{{ asset('images/icons/' . $icon) }}">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
                     </div>
 
                     <input type="hidden" name="icon" id="selectedIncomeIcon" value="coins/coins-green.png">

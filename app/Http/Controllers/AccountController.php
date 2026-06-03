@@ -7,18 +7,19 @@ use Illuminate\Support\Facades\File;
 use App\Models\Account;
 use App\Models\Operation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
 
     public function index()
     {
-        $accounts = Account::where('user_id', auth()->id())->get();
+        $accounts = Account::where('user_id', Auth::id())->get();
 
         $iconPath = public_path('images/icons');
 
         $icons = collect(File::directories($iconPath))
-            ->filter(fn($dir) => basename($dir) !== 'option') // ❗ пропускаємо
+            ->filter(fn($dir) => basename($dir) !== 'option')
             ->mapWithKeys(function ($dir) {
 
                 $category = basename($dir);
@@ -44,7 +45,7 @@ class AccountController extends Controller
     private function balanceChartData(float $currentBalance): array
     {
         $start = Carbon::now()->subDays(6)->startOfDay();
-        $operations = Operation::where('user_id', auth()->id())
+        $operations = Operation::where('user_id', Auth::id())
             ->where('date', '>=', $start)
             ->orderBy('date')
             ->get();
@@ -80,25 +81,25 @@ class AccountController extends Controller
             'color' => 'required'
         ]);
 
-        Account::create($data + ['user_id' => auth()->id()]);
+        Account::create($data + ['user_id' => Auth::id()]);
 
         return redirect()->back();
     }
 
     public function destroy($id)
     {
-        Account::where('user_id', auth()->id())->findOrFail($id)->delete();
+        Account::where('user_id', Auth::id())->findOrFail($id)->delete();
         return response()->json(['success' => true]);
     }
 
     public function show($id)
     {
-        return Account::where('user_id', auth()->id())->findOrFail($id);
+        return Account::where('user_id', Auth::id())->findOrFail($id);
     }
 
     public function update(Request $request, $id)
     {
-        $acc = Account::where('user_id', auth()->id())->findOrFail($id);
+        $acc = Account::where('user_id', Auth::id())->findOrFail($id);
 
         $data = $request->validate([
             'name' => 'required',

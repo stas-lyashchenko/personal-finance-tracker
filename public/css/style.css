@@ -602,10 +602,6 @@ button {
     background: var(--accent-dark);
 }
 
-.modal-content form label {
-    margin-top: 10px;
-}
-
 .modal-content h3 {
     color: #1e293b;
     font-size: 22px;

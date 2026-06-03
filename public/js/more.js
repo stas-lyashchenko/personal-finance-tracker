@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const avatarButton = document.getElementById('avatarButton');
     const avatarInput = document.getElementById('avatarInput');
     const avatarForm = document.getElementById('avatarForm');
+    const importFileInput = document.getElementById('file');
+    const importFileName = document.getElementById('fileName');
 
     if (avatarButton && avatarInput && avatarForm) {
         avatarButton.addEventListener('click', () => avatarInput.click());
@@ -32,6 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    if (importFileInput && importFileName) {
+        importFileInput.addEventListener('change', () => {
+            importFileName.textContent = importFileInput.files.length
+                ? importFileInput.files[0].name
+                : importFileName.dataset.emptyText;
+        });
+    }
+
     document.getElementById('importForm').addEventListener('submit', function (e) {
         e.preventDefault();
 

@@ -11,12 +11,14 @@
 
 @php
     $currencyCode = $currencyCode ?? ($user->currency ?? 'UAH');
-    $currencySymbol = $currencySymbol ?? match ($currencyCode) {
-        'USD' => '$',
-        'EUR' => '€',
-        'PLN' => 'zł',
-        default => '₴',
-    };
+    $currencySymbol =
+        $currencySymbol ??
+        match ($currencyCode) {
+            'USD' => '$',
+            'EUR' => '€',
+            'PLN' => 'zł',
+            default => '₴',
+        };
 @endphp
 
 <body class="{{ ($user->theme ?? 'light') === 'dark' ? 'dark-theme' : '' }}">
@@ -30,7 +32,8 @@
                 <span class="ico"><img src="{{ asset('images/icons/option/category/category-blue.png') }}"></span>
                 <span class="txt">Категорії</span>
             </a>
-            <a class="menu-item {{ request()->routeIs('operations') ? 'open' : '' }}" href="{{ route('operations') }}">
+            <a class="menu-item {{ request()->routeIs('operations') ? 'open' : '' }}"
+                href="{{ route('operations') }}">
                 <span class="ico"><img src="{{ asset('images/icons/option/file/file-blue.png') }}"></span>
                 <span class="txt">Операції</span>
             </a>
@@ -226,15 +229,18 @@
                 <h3>Імпорт операцій</h3>
                 <form id="importForm" enctype="multipart/form-data">
                     @csrf
-                    <label>Банк</label>
+                    <label id="label-10">Банк</label>
                     <select name="bank" id="bank">
                         <option value="privat">ПриватБанк</option>
                         <option value="mono">Monobank</option>
-                        <option value="pumb">ПУМБ</option>
-                        <option value="oschad">Ощадбанк</option>
                     </select>
-                    <label>Файл</label>
-                    <input type="file" name="file" id="file" accept=".csv,.xlsx,.xls" required>
+                    <label id="label-10">Файл</label>
+                    <div class="file-picker">
+                        <input type="file" name="file" id="file" accept=".csv,.xlsx,.xls">
+                        <label for="file" class="file-picker-button">Обрати файл</label>
+                        <span id="fileName" class="file-picker-name" data-empty-text="Файл не вибрано">Файл не
+                            вибрано</span>
+                    </div>
                     <button type="submit" class="add">Завантажити</button>
                     <button type="button" onclick="closeImportModal()" class="close-btn">Закрити</button>
                 </form>

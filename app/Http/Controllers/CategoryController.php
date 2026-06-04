@@ -14,6 +14,7 @@ class CategoryController extends Controller
     {
         $categories = Category::where('user_id', auth()->id())->get();
         [$periodStart, $periodEnd] = $this->selectedPeriod(request('date_from'), request('date_to'));
+        $showHiddenCategories = request()->boolean('show_hidden_categories');
         $operationTotals = Operation::where('user_id', auth()->id())
             ->selectRaw('category_id, type, SUM(amount) as total')
             ->whereNotNull('category_id')
@@ -51,7 +52,7 @@ class CategoryController extends Controller
         $dateFrom = $periodStart->toDateString();
         $dateTo = $periodEnd->toDateString();
 
-        return view('categories', compact('categories', 'icons', 'monthlyExpenses', 'monthlyIncome', 'dateFrom', 'dateTo'));
+        return view('categories', compact('categories', 'icons', 'monthlyExpenses', 'monthlyIncome', 'dateFrom', 'dateTo', 'showHiddenCategories'));
     }
 
     private function selectedPeriod(?string $from, ?string $to): array

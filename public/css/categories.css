@@ -145,3 +145,19 @@
   color: var(--accent);
 }
 
+.filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.date-filter-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.save-btn {
+    margin: 0;
+}

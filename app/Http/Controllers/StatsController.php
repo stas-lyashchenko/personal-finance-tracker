@@ -73,6 +73,7 @@ class StatsController extends Controller
         $expenseGroups = $periodOperations->where('type', 'expense')
             ->groupBy(fn($operation) => $operation->category->name ?? 'Без категорії')
             ->map(fn($items) => round((float) $items->sum('amount'), 2))
+            ->filter(fn($total) => $total > 0)
             ->sortDesc();
         $largestOperation = $periodOperations->where('type', 'expense')->sortByDesc('amount')->first();
 

@@ -486,51 +486,60 @@ class ImportedOperationController extends Controller
 
     private function detectCategory(string $description, string $type, ?string $importedCategory = null): Category
     {
-        $normalizedDescription = $this->normalize($description);
         $userId = Auth::id();
-        $matchedCategoryName = null;
 
+        $normalizedDescription = $this->normalize($description);
+        $normalizedImportedCategory = $this->normalize($importedCategory);
+
+        // Спочатку перевіряємо Категорію з файлу
         foreach ($this->categoryKeywords as $name => $keywords) {
             foreach ($keywords as $keyword) {
 
-                if (str_contains($normalizedDescription, $this->normalize($keyword))) {
-                    $matchedCategoryName = $name;
-                    $existingCategory = Category::where('user_id', $userId)
-                        ->where('type', $type)
-                        ->where('name', $name)
-                        ->first();
+                $normalizedKeyword = $this->normalize($keyword);
 
-                    if ($existingCategory) {
-                        return $existingCategory;
-                    }
-
-                    break 2;
+                if (
+                    str_contains($normalizedImportedCategory, $normalizedKeyword) ||
+                    str_contains($normalizedDescription, $normalizedKeyword)
+                ) {
+                    return Category::firstOrCreate(
+                        [
+                            'user_id' => $userId,
+                            'name' => $name,
+                            'type' => $type
+                        ],
+                        [
+                            'amount' => 0,
+                            'icon' => $type === 'income'
+                                ? 'coins/coins-green.png'
+                                : 'images/default.png',
+                            'color' => $type === 'income'
+                                ? 'green'
+                                : 'gray',
+                        ]
+                    );
                 }
             }
         }
 
-        // якщо категорію не знайдено
-        $importedCategory = $this->cleanDescription($importedCategory);
-
+        // Якщо назва категорії з файлу вже існує
         if ($importedCategory) {
             $existingCategory = Category::where('user_id', $userId)
                 ->where('type', $type)
                 ->get()
-                ->first(fn(Category $category) => $this->normalize($category->name) === $this->normalize($importedCategory));
+                ->first(
+                    fn(Category $category) =>
+                    $this->normalize($category->name) === $normalizedImportedCategory
+                );
 
             if ($existingCategory) {
                 return $existingCategory;
             }
         }
 
-        $generatedName = $matchedCategoryName ?: $importedCategory ?: Str::title(
-            Str::limit($description, 30, '')
-        );
-
         return Category::firstOrCreate(
             [
                 'user_id' => $userId,
-                'name' => $generatedName,
+                'name' => $importedCategory ?: Str::title(Str::limit($description, 30, '')),
                 'type' => $type
             ],
             [
@@ -538,7 +547,6 @@ class ImportedOperationController extends Controller
                 'icon' => $type === 'income'
                     ? 'coins/coins-green.png'
                     : 'images/default.png',
-
                 'color' => $type === 'income'
                     ? 'green'
                     : 'gray',

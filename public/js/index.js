@@ -268,8 +268,9 @@ function drawBalanceChart() {
     const padding = { top: 24, right: 26, bottom: 38, left: 62 };
     const width = rect.width - padding.left - padding.right;
     const height = rect.height - padding.top - padding.bottom;
+    const isEmptyBalance = values.length === 0 || values.every(value => Number(value) === 0);
     const min = Math.min(...values, 0);
-    const max = Math.max(...values, 1);
+    const max = isEmptyBalance ? 0 : Math.max(...values, 1);
     const span = max - min || 1;
 
     const panelGradient = ctx.createLinearGradient(0, 0, 0, rect.height);
@@ -291,7 +292,11 @@ function drawBalanceChart() {
         ctx.moveTo(padding.left, y);
         ctx.lineTo(padding.left + width, y);
         ctx.stroke();
-        ctx.fillText(Math.round(value).toLocaleString('uk-UA'), padding.left - 10, y + 4);
+
+        if (!isEmptyBalance || i === 4) {
+            const labelValue = isEmptyBalance ? 0 : value;
+            ctx.fillText(Math.round(labelValue).toLocaleString('uk-UA'), padding.left - 10, y + 4);
+        }
     }
 
     const points = values.map((value, index) => ({

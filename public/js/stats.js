@@ -162,7 +162,7 @@ function drawHorizontalBars(canvasId, labels, values) {
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'left';
         ctx.font = '700 12px Arial';
-        ctx.fillText(money(value), padding.left + Math.min(barWidth + 10, chartWidth - 54), y + 14);
+        ctx.fillText(money(value), padding.left + Math.min(barWidth + 10, chartWidth - 54), y + 10);
         ctx.font = '12px Arial';
     });
 }
@@ -344,11 +344,9 @@ function renderStats(period = 'month') {
     document.getElementById('statAvgExpense').innerText = money(data.avgDailyExpense);
     document.getElementById('statSavingsRate').innerText = `${data.savingsRate || 0}%`;
     document.getElementById('statTopCategory').innerText = data.topCategory || 'Немає даних';
-    document.getElementById('largestOperationPill').innerText = `Найбільша витрата: ${data.largestOperation || 'Немає даних'} · ${money(data.largestOperationValue)}`;
 
     drawHorizontalBars('categoryChart', data.categoryLabels || [], data.categoryValues || []);
     drawDonut('flowChart', data.flowLabels || [], data.flowValues || []);
-    drawAreaLine('trendChart', data.trendLabels || [], data.trendValues || []);
 }
 
 document.querySelectorAll('#statsPeriodTabs .seg').forEach(button => {

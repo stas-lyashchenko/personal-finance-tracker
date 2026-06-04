@@ -85,7 +85,14 @@
                     <label for="date_to">До</label>
                     <input type="date" id="date_to" name="date_to" value="{{ $dateTo }}">
                 </div>
-                <button type="submit" class="save-btn">Показати</button>
+                <div class="filter-actions">
+                    <label class="date-filter-check">
+                        <input type="checkbox" name="show_hidden_categories" value="1"
+                            @checked($showHiddenCategories)>
+                        <span>Показати сховані категорії</span>
+                    </label>
+                    <button type="submit" class="save-btn">Показати</button>
+                </div>
             </div>
         </form>
 
@@ -121,7 +128,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="editName">Назва</label>
-                            <input type="text" name="name" id="editName" placeholder="Назва категорії" required>
+                            <input type="text" name="name" id="editName" placeholder="Назва категорії"
+                                required>
                         </div>
                     </div>
 
@@ -178,7 +186,7 @@
             <div class="cardc category-panel">
                 <h3>Категорії витрат</h3>
 
-                @foreach ($categories->where('type', 'expense') as $cat)
+                @foreach ($categories->where('type', 'expense')->when(!$showHiddenCategories, fn($items) => $items->where('amount', '>', 0)) as $cat)
                     @php
                         $percent = $expenseTotal > 0 ? ($cat->amount / $expenseTotal) * 100 : 0;
                     @endphp
@@ -272,7 +280,7 @@
             <div class="cardc category-panel">
                 <h3>Категорії доходів</h3>
 
-                @foreach ($categories->where('type', 'income') as $cat)
+                @foreach ($categories->where('type', 'income')->when(!$showHiddenCategories, fn($items) => $items->where('amount', '>', 0)) as $cat)
                     @php
                         $percent = $incomeTotal > 0 ? ($cat->amount / $incomeTotal) * 100 : 0;
                     @endphp
